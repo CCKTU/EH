@@ -1,0 +1,154 @@
+🧩 RESULT & ANALYSIS (with Commands) — ALL EXPERIMENTS
+
+🧪 Experiment 1 – Recon-ng (Active Reconnaissance)
+
+Commands Used:
+
+# Install and launch Recon-ng
+git clone https://github.com/lanmaster53/recon-ng.git
+cd recon-ng
+./recon-ng
+
+# Create a workspace
+workspaces create geeksforgeeks
+workspaces select geeksforgeeks
+
+# Search and install modules
+marketplace search
+marketplace install all
+
+# Load a module and set target
+modules load recon/domains-hosts/hackertarget
+options set SOURCE google.com
+run
+
+
+Result & Analysis:
+The Recon-ng framework was successfully used to perform active reconnaissance on the target domain. It collected subdomains, DNS details, and host data.
+The tool’s modular structure (similar to Metasploit) made reconnaissance efficient and automated. Recon-ng integrates with data sources like Shodan and WHOIS, helping to discover IP addresses, open ports, and subdomains, which are critical for mapping a target’s digital footprint.
+
+🧪 Experiment 2 – Enumerate Infrastructure and Application Admin Interface
+
+Commands Used:
+
+# DNSRecon - Enumerate DNS records and check zone transfers
+dnsrecon -d example.com -t std
+dnsrecon -d example.com -t axfr
+
+# theHarvester - Collect emails, subdomains, and hosts
+theharvester -d example.com -b google
+
+# dig command - retrieve DNS info
+dig example.com
+
+# Google Dork examples
+site:example.com "admin"
+filetype:pdf "confidential"
+intitle:"index of" password
+
+
+Result & Analysis:
+Infrastructure and admin interface enumeration were performed using Dnsrecon, theHarvester, and Google Dorking. Subdomains, DNS records, and potential admin URLs were discovered.
+This experiment showed how publicly accessible information can expose administrative interfaces. Implementing VPNs, IP whitelisting, and multi-factor authentication is essential to secure such endpoints from unauthorized access.
+
+🧪 Experiment 3 – Configuration and Deployment Testing
+
+Commands Used:
+
+# WPScan - scan a WordPress site for vulnerabilities
+wpscan --url https://example.com
+
+# Enumerate users
+wpscan --url https://example.com -e u
+
+# Brute force login with wordlist
+wpscan --url https://example.com -U admin -P /usr/share/wordlists/rockyou.txt
+
+# OWASP ZAP (GUI steps)
+# 1. Open ZAP -> Quick Start -> Enter Target URL
+# 2. Click “Attack” for Auto Scan
+# 3. Review results under “Alerts” tab
+
+
+Result & Analysis:
+The WPScan tool identified vulnerable plugins and outdated WordPress versions, while OWASP ZAP detected misconfigurations and weak authentication settings.
+These findings highlighted the importance of maintaining secure configuration management — outdated or weakly configured systems increase risk exposure. ZAP’s active and passive scanning modes helped analyze both visible and hidden vulnerabilities effectively.
+
+🧪 Experiment 4 – Identity Management Testing (Burp Suite)
+
+Commands / Steps:
+
+Open Burp Suite → Proxy → Intercept: ON
+
+Navigate to the web app’s registration/login page.
+
+Capture requests → Send to Intruder.
+
+Modify parameters like username and password to test role and registration policies.
+
+Observe server responses for account enumeration or weak username enforcement.
+
+Result & Analysis:
+Burp Suite was used to test identity and role management by analyzing registration and authentication flows. The experiment demonstrated that weak username policies and unvalidated registrations can lead to account enumeration.
+Implementing unique identity checks, generic error messages, and verified registration processes ensures secure identity management in web applications.
+
+🧪 Experiment 5 – Authentication and Authorization Testing
+
+Commands / Steps:
+
+Open Burp → Proxy tab → capture login request.
+
+Right-click → Send to Intruder.
+
+Set attack type: Cluster Bomb for brute force.
+
+Load usernames and password lists.
+
+Click Start Attack → monitor status/length columns.
+
+Check for successful logins or weak password policy.
+
+Test for lockout policy by repeated failed attempts.
+
+Result & Analysis:
+Using Burp Suite Intruder, brute force and lockout mechanisms were analyzed. The system locked accounts after repeated failed attempts, showing an active lockout policy.
+Weak password and missing 2FA were identified as risks. The test confirmed that strong authentication (complex passwords, account lockouts, MFA) and role-based authorization (RBAC) improve system resilience.
+
+🧪 Experiment 6 – Input Validation Testing (SQL Injection)
+
+Commands / Steps:
+
+# Capture vulnerable parameter in Burp Proxy
+# Right-click -> Send to Intruder
+
+# Add payloads such as:
+' OR '1'='1' --
+' OR 'x'='x' --
+' UNION SELECT username, password FROM users --
+
+# Start attack and observe responses
+
+
+Result & Analysis:
+SQL injection was successfully tested by injecting SQL payloads into user input fields. In some cases, database error messages or delays confirmed the vulnerability.
+This test showed that improper input validation can lead to data leaks or full database compromise. To prevent SQLi, developers must use parameterized queries (PreparedStatements), input sanitization, and disable detailed error outputs.
+
+🧪 Experiment 7 – Client-Side Testing (XSS & HTML Injection)
+
+Commands / Steps:
+
+# Using Burp Suite Repeater:
+# 1. Capture input form request
+# 2. Right-click -> Send to Repeater
+# 3. Insert payloads into parameters:
+
+<script>alert('XSS')</script>
+<img src=x onerror=alert('XSS')>
+<b>Injected HTML</b>
+
+# 4. Click “Go” and observe reflected or stored output.
+
+
+Result & Analysis:
+Client-side testing revealed vulnerabilities like Cross-Site Scripting (XSS) and HTML Injection. Injected payloads executed successfully in the browser, confirming poor input sanitization.
+These attacks can steal cookies, hijack sessions, or deface webpages. To prevent them, developers should sanitize user input, apply output encoding, and implement Content Security Policy (CSP).
